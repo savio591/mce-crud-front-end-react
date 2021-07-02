@@ -1,5 +1,9 @@
 # MCE - Case 1 - CRUD de cadastros de usuários - Frontend Web
 
+[![wakatime](https://wakatime.com/badge/github/savio591/mce-onboarding-web.svg)](https://wakatime.com/badge/github/savio591/mce-onboarding-web)
+[![codeinspector](https://www.code-inspector.com/project/24069/score/svg)](https://frontend.code-inspector.com/public/project/24069/mce-onboarding-web/dashboard)
+[![codeinspector](https://www.code-inspector.com/project/24069/status/svg)](https://frontend.code-inspector.com/public/project/24069/mce-onboarding-web/dashboard)
+
 Primeiro case do programa [Mind Coding Experience(MCE)](https://conteudos.provi.com.br/mind-coding-experience/), feito pela [Mind Consulting](https://mindconsulting.com.br/) em parceria com a fintech [Provi](https://provi.com.br), com o intuito de evoluir as habilidades técnicas participando de projetos e recebendo acompanhamento de profissionais sêniores do mercado.
 
 ## A proposta do case 1: Full-Stack CRUD
