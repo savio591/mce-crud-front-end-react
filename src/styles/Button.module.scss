@@ -1,0 +1,22 @@
+.button {
+  width: 100%;
+  border: none;
+  background: var(--button-purple);
+  color: #fff;
+  text-transform: uppercase;
+  height: 56px;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 27px;
+  text-align: center;
+  border-radius: 8px;
+  transition: filter .1s;
+
+  &:hover {
+    filter: brightness(0.8);
+  }
+
+  &:active {
+    filter: brightness(0.7);
+  }
+}
