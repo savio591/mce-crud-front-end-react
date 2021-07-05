@@ -1,14 +1,20 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import { GetStaticProps } from 'next';
 import { useRouter } from 'next/dist/client/router';
 import Head from 'next/head';
 import { SyntheticEvent, useState } from 'react';
 
 import { Form } from '../components/Form';
+import { Input } from '../components/Input';
+import { Button } from '../components/Button';
+
+import formPageStyles from '../styles/FormPages.module.scss';
 
 export default function Login(): JSX.Element {
   const router = useRouter();
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isSendingRequest, setIsSendingRequest] = useState(false);
 
   function delay(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -16,17 +22,21 @@ export default function Login(): JSX.Element {
 
   async function handlerLogin(event: SyntheticEvent): Promise<void> {
     event.preventDefault();
+    setIsSendingRequest(true);
 
-    if (username === 'savio591' && password === 'shoppng591') {
+    if (email === 'savio591@hotmail.com' && password === 'shoppng591') {
       const response = await fetch('/api/test', { method: 'POST' });
 
       if (response.ok) {
-        setUsername('Sucesso!!');
+        await delay(2000);
+        setIsSendingRequest(false);
+        setEmail('Sucesso!!');
         await delay(2000);
         router.push('/dashboard');
         return;
       }
-      setUsername('NN deu certo man');
+      setIsSendingRequest(false);
+      setEmail('NN deu certo man');
     }
   }
 
@@ -35,31 +45,46 @@ export default function Login(): JSX.Element {
       <Head>
         <title>Login | MCE Tech</title>
       </Head>
-      <main>
-        <Form onSubmit={handlerLogin}>
-          <label htmlFor="username" aria-labelledby="username">
-            <input
-              id="username"
-              type="text"
-              autoComplete="nickname"
-              placeholder="usuário"
-              value={username}
-              onInput={event => setUsername(event.currentTarget.value)}
+      <main className={formPageStyles.container}>
+        <Form
+          onSubmit={handlerLogin}
+          headerTitle="Entrar"
+          headerSubtitle="O seu passaporte para o futuro."
+        >
+          <label htmlFor="email">
+            Email
+            <Input
+              id="email"
+              type="email"
+              autoComplete="email"
+              placeholder="seuemail@email.com"
+              title="Digite o seu email"
+              value={email}
+              onInput={event => setEmail(event.currentTarget.value)}
+              autoFocus
               required
             />
           </label>
-          <label htmlFor="password" aria-labelledby="password">
-            <input
+          <label htmlFor="password">
+            Senha
+            <Input
               id="password"
               type="password"
-              placeholder="senha"
+              placeholder="*********"
+              title="Digite a sua senha"
               autoComplete="current-password"
               value={password}
               onInput={event => setPassword(event.currentTarget.value)}
+              minLength={8}
               required
             />
           </label>
-          <button type="submit">Register</button>
+          <Button type="submit" disabled={isSendingRequest}>
+            {!isSendingRequest ? 'Login' : 'Aguarde...'}
+          </Button>
+          <p>
+            Não possui uma conta? <a href="./">Registrar-se</a>
+          </p>
         </Form>
       </main>
     </>
