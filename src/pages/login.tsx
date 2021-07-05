@@ -1,8 +1,9 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
+import { SyntheticEvent, useState } from 'react';
 import { GetStaticProps } from 'next';
 import { useRouter } from 'next/dist/client/router';
 import Head from 'next/head';
-import { SyntheticEvent, useState } from 'react';
+import Link from 'next/link';
 
 import { Form } from '../components/Form';
 import { Input } from '../components/Input';
@@ -79,11 +80,17 @@ export default function Login(): JSX.Element {
               required
             />
           </label>
+          <Link href="/recovery">
+            <a>Esqueci a minha senha</a>
+          </Link>
           <Button type="submit" disabled={isSendingRequest}>
             {!isSendingRequest ? 'Login' : 'Aguarde...'}
           </Button>
           <p>
-            Não possui uma conta? <a href="./">Registrar-se</a>
+            Não possui uma conta?{' '}
+            <Link href="/signup" prefetch>
+              <a>Registrar-se</a>
+            </Link>
           </p>
         </Form>
       </main>
