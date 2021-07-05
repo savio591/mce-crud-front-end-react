@@ -1,3 +1,7 @@
+.container {
+  position: relative;
+}
+
 .input {
   display: flex;
   background: transparent;
@@ -31,7 +35,6 @@
 
   &:focus {
     border-bottom: 0.793673px solid #03014c80;
-
   }
   &:invalid {
     border-bottom: 0.793673px solid red;
@@ -40,4 +43,14 @@
   &:valid {
     border-bottom: 0.793673px solid green;
   }
+}
+
+.button {
+  position: absolute;
+  display: flex;
+  top: 0;
+  background: transparent;
+  border: none;
+  right: 0;
+  padding: 20px 12px;
 }
