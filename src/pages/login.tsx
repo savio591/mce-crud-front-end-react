@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { SyntheticEvent, useState } from 'react';
 import { GetStaticProps } from 'next';
+import { signIn, useSession } from 'next-auth/client';
 import { useRouter } from 'next/dist/client/router';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -12,33 +13,30 @@ import { Button } from '../components/Button';
 import formPageStyles from '../styles/FormPages.module.scss';
 
 export default function Login(): JSX.Element {
+  const [session] = useSession();
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSendingRequest, setIsSendingRequest] = useState(false);
 
-  function delay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
+  if (session?.user) router.push('/dashboard');
 
   async function handlerLogin(event: SyntheticEvent): Promise<void> {
     event.preventDefault();
     setIsSendingRequest(true);
 
-    if (email === 'savio591@hotmail.com' && password === 'shoppng591') {
-      const response = await fetch('/api/test', { method: 'POST' });
+    const response = await signIn('credentials', {
+      redirect: false,
+      email,
+      password,
+    });
 
-      if (response.ok) {
-        await delay(2000);
-        setIsSendingRequest(false);
-        setEmail('Sucesso!!');
-        await delay(2000);
-        router.push('/dashboard');
-        return;
-      }
-      setIsSendingRequest(false);
-      setEmail('NN deu certo man');
+    if (response.ok) {
+      router.push('/dashboard');
+      return;
     }
+    setEmail('Algo errado não está certo.');
+    setIsSendingRequest(false);
   }
 
   return (
@@ -88,7 +86,7 @@ export default function Login(): JSX.Element {
           </Button>
           <p>
             Não possui uma conta?{' '}
-            <Link href="/signup" prefetch>
+            <Link href="/signup">
               <a>Registrar-se</a>
             </Link>
           </p>
