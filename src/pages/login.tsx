@@ -1,8 +1,9 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { SyntheticEvent, useState } from 'react';
+import { SyntheticEvent, useState, useEffect } from 'react';
 import { GetStaticProps } from 'next';
 import { signIn, useSession } from 'next-auth/client';
 import { useRouter } from 'next/dist/client/router';
+import { FiAlertCircle } from 'react-icons/fi';
 import Head from 'next/head';
 import Link from 'next/link';
 
@@ -12,18 +13,30 @@ import { Button } from '../components/Button';
 
 import formPageStyles from '../styles/FormPages.module.scss';
 
+interface ResponseMessage {
+  type: 'success' | 'error';
+  message: string;
+}
+
 export default function Login(): JSX.Element {
   const [session] = useSession();
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSendingRequest, setIsSendingRequest] = useState(false);
+  const [responseMessage, setResponseMessage] =
+    useState<ResponseMessage | null>(null);
 
-  if (session?.user) router.push('/dashboard');
+  useEffect(() => {
+    if (session?.user) {
+      router.push('/dashboard');
+    }
+  }, [session?.user, router]);
 
   async function handlerLogin(event: SyntheticEvent): Promise<void> {
     event.preventDefault();
     setIsSendingRequest(true);
+    setResponseMessage(null);
 
     const response = await signIn('credentials', {
       redirect: false,
@@ -32,10 +45,15 @@ export default function Login(): JSX.Element {
     });
 
     if (response.ok) {
-      router.push('/dashboard');
+      setResponseMessage({ message: 'Logado com sucesso!', type: 'success' });
       return;
     }
-    setEmail('Algo errado não está certo.');
+
+    setResponseMessage({
+      message: 'Ocorreu um erro, tente novamente!',
+      type: 'error',
+    });
+    setPassword('');
     setIsSendingRequest(false);
   }
 
@@ -50,6 +68,16 @@ export default function Login(): JSX.Element {
           headerTitle="Entrar"
           headerSubtitle="O seu passaporte para o futuro."
         >
+          <div role="alertdialog">
+            {responseMessage && (
+              <>
+                <FiAlertCircle
+                  color={responseMessage.type === 'error' ? 'red' : 'green'}
+                />
+                <p>{responseMessage.message}</p>
+              </>
+            )}
+          </div>
           <label htmlFor="email">
             Email
             <Input

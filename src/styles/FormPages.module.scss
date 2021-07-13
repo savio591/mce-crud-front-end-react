@@ -2,9 +2,7 @@
   display: flex;
   background-image: url('/images/bg.jpg');
   background-position: 0 -191px;
-  min-width: 100vw;
   min-height: 100vh;
-  
 
   @media (max-height: 456px) {
     background: none;
