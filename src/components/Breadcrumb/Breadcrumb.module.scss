@@ -1,0 +1,33 @@
+.breadcrumb {
+  background: rgb(127, 99, 244, 0.1);
+  width: 100%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  padding: 0 2rem;
+
+  ul {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 0.75rem;
+  }
+
+  li {
+    color: var(--purple);
+    font-weight: bold;
+    font-size: 22px;
+    line-height: 30px;
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.22px;
+
+    & + li::before {
+      content: '>';
+      line-height: 30px;
+      padding: 0 8px 0 0;
+    }
+  }
+}

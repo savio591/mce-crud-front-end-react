@@ -1,0 +1,57 @@
+.container {
+  position: relative;
+}
+
+.input {
+  display: flex;
+  background: transparent;
+  border: none;
+  outline: transparent;
+  border-bottom: 0.793673px solid #03014c14;
+  transition: border 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
+  padding: 1rem 0;
+  color: var(--text-heading);
+  font-weight: 600;
+  font-size: 16px;
+  width: 100%;
+
+  &:autofill {
+    appearance: none;
+    background: none;
+  }
+
+  &:-webkit-autofill {
+    appearance: none;
+    background: transparent;
+  }
+
+  &::placeholder {
+    color: var(--text-label);
+    opacity: 0.75;
+
+    &:focus {
+      opacity: 0.5;
+    }
+  }
+
+  &:focus {
+    border-bottom: 0.793673px solid #03014c80;
+  }
+  &:invalid {
+    border-bottom: 0.793673px solid red;
+  }
+
+  &:valid {
+    border-bottom: 0.793673px solid green;
+  }
+}
+
+.button {
+  position: absolute;
+  display: flex;
+  top: 0;
+  background: transparent;
+  border: none;
+  right: 0;
+  padding: 20px 12px;
+}
