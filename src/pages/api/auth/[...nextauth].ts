@@ -1,9 +1,8 @@
-import { query as q } from 'faunadb';
-
-import NextAuth from 'next-auth';
-
+import NextAuth, { Session, User } from 'next-auth';
 import Providers from 'next-auth/providers';
+import { FaunaAdapter } from '@next-auth/fauna-adapter';
 
+import { api } from '../../../services/api';
 import { fauna } from '../../../services/fauna';
 
 interface CredentialsProps {
@@ -11,13 +10,24 @@ interface CredentialsProps {
   password: string;
 }
 
+interface SessionUserData extends Session {
+  user: {
+    name: string;
+    email: string;
+    image: string;
+    user: {
+      id: number;
+      nome: string;
+      email: string;
+      cpf: string;
+      acesso: number;
+      nivel: number;
+    };
+  };
+}
+
 export default NextAuth({
   providers: [
-    Providers.GitHub({
-      clientId: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      scope: 'read:user',
-    }),
     Providers.Credentials({
       name: 'Credentials',
       credentials: {
@@ -25,46 +35,49 @@ export default NextAuth({
         password: { label: 'Password', type: 'password' },
       },
 
-      async authorize(credentials: CredentialsProps) {
-        const { email, password } = credentials;
-        // const parseCredentialsToBasicAuth = Buffer.from(
-        //   `${email}:${password}`
-        // ).toString('base64');
+      async authorize(credentials: CredentialsProps): Promise<User | null> {
+        try {
+          const { email: login, password: senha } = credentials;
 
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/login`,
-          {
-            method: 'POST',
-            body: JSON.stringify({ email, password }),
+          const response = await api.post('/auth', { login, senha });
+
+          const user = response.data;
+
+          if (response.status === 200) {
+            return user;
           }
-        );
 
-        const tokens = await response.json();
-
-        if (response.ok && tokens) {
-          return tokens;
+          return null;
+        } catch (err) {
+          return null;
         }
-
-        return null;
       },
     }),
   ],
+  session: { jwt: true },
+  adapter: FaunaAdapter({ faunaClient: fauna }),
 
   callbacks: {
-    async signIn(user, account, profile) {
-      // console.log({ user, account, profile });
-      // const { email } = user;
-      // await fauna.query(
-      //   q.If(
-      //     q.Not(
-      //       q.Exists(q.Match(q.Index('user_by_email'), q.Casefold(user.email)))
-      //     ),
-      //     q.Create(q.Collection('users'), { data: { email } }),
-      //     q.Get(q.Match(q.Index('user_by_email'), q.Casefold(user.email)))
-      //   )
-      // );
+    async jwt(token, user, account) {
+      if (account && user) {
+        return {
+          accessToken: user.token,
+          user,
+        };
+      }
+      return token;
+    },
+    async session(session, token) {
+      const newSession = token as SessionUserData;
+      if (token) {
+        return {
+          ...session,
+          user: newSession.user.user,
+          accessToken: newSession.accessToken,
+        };
+      }
 
-      return true;
+      return session;
     },
   },
 });
