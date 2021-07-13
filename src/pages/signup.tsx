@@ -10,9 +10,11 @@ import { Input } from '../components/Input';
 import { Button } from '../components/Button';
 
 import formPageStyles from '../styles/FormPages.module.scss';
+import { api } from '../services/api';
 
 export default function SignUp(): JSX.Element {
   const router = useRouter();
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -27,18 +29,25 @@ export default function SignUp(): JSX.Element {
 
     setIsSendingRequest(true);
 
-    const response = await fetch('/api/test', { method: 'POST' });
+    const response = await api.post('/users', {
+      nome: name,
+      email,
+      senha: password,
+      cpf: '000.000.000-00',
+      acesso: 0,
+      nivel: 999,
+    });
 
-    if (response.ok) {
+    if (response.status === 200) {
       await delay(2000);
       setIsSendingRequest(false);
-      setEmail('Sucesso!!');
+      setEmail('Criado com sucesso!!');
       await delay(2000);
-      router.push('/dashboard');
+      router.push('/login');
       return;
     }
     setIsSendingRequest(false);
-    setEmail('NN deu certo man');
+    setEmail('erro');
   }
 
   return (
@@ -48,6 +57,20 @@ export default function SignUp(): JSX.Element {
       </Head>
       <main className={formPageStyles.container}>
         <Form onSubmit={handlerLogin} headerTitle="Cadastro">
+          <label htmlFor="nome">
+            Nome
+            <Input
+              id="name"
+              type="text"
+              autoComplete="name"
+              placeholder="Fulano Beltrano"
+              title="Digite o seu nome"
+              value={name}
+              onInput={event => setName(event.currentTarget.value)}
+              autoFocus
+              required
+            />
+          </label>
           <label htmlFor="email">
             Email
             <Input
@@ -81,7 +104,7 @@ export default function SignUp(): JSX.Element {
           <label htmlFor="password">
             Confirmar senha
             <Input
-              id="password"
+              id="confirm-password"
               type="password"
               placeholder="*********"
               title="Confirme sua senha"
