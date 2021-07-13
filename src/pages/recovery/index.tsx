@@ -5,11 +5,12 @@ import { useRouter } from 'next/dist/client/router';
 import Head from 'next/head';
 import Link from 'next/link';
 
-import { Form } from '../components/Form';
-import { Input } from '../components/Input';
-import { Button } from '../components/Button';
+import { Form } from '../../components/Form';
+import { Input } from '../../components/Input';
+import { Button } from '../../components/Button';
 
-import formPageStyles from '../styles/FormPages.module.scss';
+import { vercelApi } from '../../services/api';
+import formPageStyles from '../../styles/FormPages.module.scss';
 
 export default function SignUp(): JSX.Element {
   const router = useRouter();
@@ -21,21 +22,26 @@ export default function SignUp(): JSX.Element {
   }
 
   async function handlerLogin(event: SyntheticEvent): Promise<void> {
-    event.preventDefault();
-    setIsSendingRequest(true);
-    const response = await fetch('/api/test', { method: 'POST' });
+    try {
+      event.preventDefault();
+      setIsSendingRequest(true);
+      const response = await vercelApi.post('api/recover', { email });
 
-    if (response.ok) {
-      await delay(2000);
+      if (response.status === 200) {
+        // await signIn('email', { email, redirect: false, callbackUrl: '/login' });
+        setIsSendingRequest(false);
+        setEmail('Sucesso!!');
+        await delay(2000);
+        router.push('/dashboard');
+      }
+
+      throw new Error(response.data);
+    } catch {
       setIsSendingRequest(false);
-      setEmail('Sucesso!!');
-      await delay(2000);
-      router.push('/dashboard');
-      return;
+      setEmail('NN deu certo man');
     }
-    setIsSendingRequest(false);
-    setEmail('NN deu certo man');
   }
+  // }
 
   return (
     <>
