@@ -10,9 +10,13 @@ Primeiro case do programa [Mind Coding Experience(MCE)](https://conteudos.provi.
 
 Os alunos devem criar uma plataforma simples, onde o usuário deverá criar sua conta de usuário e, posteriormente, modificar ou adicionar mais dados na sua conta. Também existira uma conta de administração da plataforma, este poderá ter acesso à lista de todos os usuários cadastrados, além de alterar quaisquer dados. A proposta é que o aluno possa entender o máximo sobre os dados em cadastros, seja a forma de requisição ao no frontend, backend, banco de dados, segurança e afins.
 
-## Roadmap:
+## Tecnologias utilizadas no front(web):
 
-### 1. Sistema de login
-
-* O usuário(cadastrado) da plataforma deve ser capaz de realizar login na plataforma inserindo nome e senha que o mesmo cadastrou no sistema.
-* Após realizar o login, o usuário deve ser direcionado para seu perfil, onde poderá modificar seus dados cadastrais.
+- Typescript,
+- Server-Side-Rendering com Next.js/React.js,
+- Static Site Generation com Next.js/React.js,
+- Axios,
+- Next-auth,
+- SCSS(SASS),
+- React-icons,
+- Input-mask
