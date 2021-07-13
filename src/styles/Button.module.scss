@@ -10,7 +10,7 @@
   line-height: 27px;
   text-align: center;
   border-radius: 8px;
-  transition: filter .1s;
+  transition: filter 0.1s;
 
   &:hover {
     filter: brightness(0.8);
@@ -18,5 +18,45 @@
 
   &:active {
     filter: brightness(0.7);
+  }
+}
+
+button.sidebar {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  cursor: pointer;
+  background: transparentize($color: #8063f4, $amount: 1);
+  width: 100%;
+  height: 56px;
+  gap: 8px;
+  padding: 0 24px;
+  border: transparent;
+  border-left: 0 solid var(--purple);
+  transition: color 0.3s, border 0.2s, background 0.3s;
+  color: #6a707e;
+
+  font-weight: 700;
+
+  &[data-is-selected='true'] {
+    background: transparentize($color: #8063f4, $amount: 0.9);
+    border-left: 5px solid var(--purple);
+    color: var(--purple);
+
+    &:hover {
+      background: transparentize($color: #8063f4, $amount: 0.8);
+      border-left: 8px solid var(--purple);
+      color: var(--purple);
+    }
+  }
+
+  &:hover {
+    background: transparentize($color: #8063f4, $amount: 0.8);
+    border-left: 3px solid transparent;
+    color: var(--purple);
+    &:active {
+      background: transparentize($color: #8063f4, $amount: 0.7);
+    }
   }
 }

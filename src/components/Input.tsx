@@ -30,7 +30,7 @@ export function Input({ ...props }: InputProps): JSX.Element {
             onClick={togglePassword}
             role="switch"
             aria-checked={passwordShown}
-            aria-hidden="true"
+            aria-hidden
           >
             {passwordShown ? <FiEye /> : <FiEyeOff />}
           </button>
